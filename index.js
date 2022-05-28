@@ -21,12 +21,32 @@ async function run() {
     await client.connect();
 
     const toolCollection = client.db("nano-mart").collection("tools");
+    const bookingCollection = client.db("nano-mart").collection("bookings");
+    const reviewCollection = client.db("nano-mart").collection("reviews");
 
     app.get("/tool", async (req, res) => {
       const query = {};
       const cursor = toolCollection.find(query);
       const tools = await cursor.toArray();
       res.send(tools);
+    });
+    app.post("/booking", async (req, res) => {
+      const booking = req.body;
+
+      const result = await bookingCollection.insertOne(booking);
+      res.send(result);
+    });
+    app.post("/review", async (req, res) => {
+      const review = req.body;
+
+      const result = await reviewCollection.insertOne(review);
+      res.send(result);
+    });
+    app.get("/review", async (req, res) => {
+      const query = {};
+      const cursor = reviewCollection.find(query);
+      const reviews = await cursor.toArray();
+      res.send(reviews);
     });
   } finally {
   }
